@@ -1,11 +1,33 @@
 name: Actions Workflow 
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - "feature/**" # matches featur/featA, feature/featB, doesn't match feature/feat/a
+      - "!feature/featc"
+    tags: 
+      - v1.*
+    paths: 
+      - "**.js"
+      - "!filename.js"
+    # paths-ignore:
+    # - 'docs/**'
+  # repository_dispatch:
+  #   types: [build]
+  # schedule:
+  #   - cron: "0/5 * * * *"
+  #   - cron: "0/6 * * * *" 
+  # push:
+  # pull_request:
+  #   types: [closed, assigned, opened, reopened]
 
 jobs: 
   run-github-actions: 
     runs-on: ubuntu-latest
     steps:
+      - name: playload
+        run: echo ${{ github.event.client_payload.env }}
       - name: List Files 
         run: |
           pwd
@@ -29,3 +51,4 @@ jobs:
           who-to-greet: John
       - name: Log Greeting Time
         run: echo "${{ steps.greet.outputs.time }}"
+
